@@ -385,7 +385,7 @@ Deliberate Practice Policy Optimization</a>
     <!-- Abstract 部分 -->
     <div class="abstract-section">
         <h2>Abstract</h2>
-        <p>Developing a universal and versatile embodied intelligence system presents two primary challenges: the critical embodied data bottleneck, where real-world data is scarce and expensive, and the algorithmic inefficiency of existing methods, which are resource-prohibitive. To address these limitations, we introduce Deliberate Practice Policy Optimization (DPPO), a metacognitive “Metaloop” training framework that dynamically alternates between supervised fine-tuning (competence expansion) and reinforcement learning (skill refinement). This enables automatic weakness identification and targeted resource allocation, specifically designed to maximize learning efficiency from sparse, finite data. Theoretically, DPPO can be formalised as a unified preference-learning framework. Empirically, training a vision-language embodied model with DPPO, referred to as Pelican-VL 1.0, yields a 20.3% performance improvement over the base model and surpasses opensource models at the 100B-parameter scale by 10.6%. We are open-sourcing both the models and code, providing the first systematic framework that alleviates the data and resource bottleneck and enables the community to build versatile embodied agents efficiently</p>
+        <p>Developing a universal and versatile embodied intelligence system presents two primary challenges: the critical embodied data bottleneck, where real-world data is scarce and expensive, and the algorithmic inefficiency of existing methods, which are resource-prohibitive. To address these limitations, we introduce Deliberate Practice Policy Optimization (DPPO), a metacognitive “Metaloop” training framework that dynamically alternates between supervised fine-tuning (competence expansion) and reinforcement learning (skill refinement). This enables automatic weakness identification and targeted resource allocation, specifically designed to maximize learning efficiency from sparse, finite data. Theoretically, DPPO can be formalised as a unified preference-learning framework. Empirically, training a vision-language embodied model with DPPO, referred to as Pelican-VL 1.0, yields a 20.3% performance improvement over the base model and surpasses opensource models at the 100B-parameter scale by 10.6%. We are open-sourcing both the models and code, providing the first systematic framework that alleviates the data and resource bottleneck and enables the community to build versatile embodied agents efficiently.</p>
     </div>
 
     <!-- 新增：Method 部分 -->
@@ -406,7 +406,7 @@ Deliberate Practice Policy Optimization</a>
                 <span class="finding-tag">Finding 1:</span> Pelican-VL 72B exhibits continuous improvements on embodied benchmarks while maintaining stable results on general datasets, as demonstrated by its consistent performance on MVBench, a general-domain benchmark.
             </div>
         </div>
-        <p class="evolution-desc">The performance curves of Pelican-VL 72B during the Metaloop process on the general benchmark (MVBench) and five embodied benchmarks (EgoSchema, RefSpatialBench, VSI-Bench, Where2Place and COSMOS).</p>
+        <p class="evolution-desc">The performance curves of Pelican-VL 72B during the Metaloop process on the general benchmark (MVBench) and five embodied benchmarks (EgoSchema, RefSpatial-Bench, VSI-Bench, Where2Place and COSMOS).</p>
         
         <div class="evolution-image-container">
             <!-- 第一行3张图 -->
@@ -471,7 +471,7 @@ Deliberate Practice Policy Optimization</a>
                     <span class="finding-tag">Finding 3:</span> DPPO preserves capability balance, mitigates catastrophic forgetting, and consistently elevates task-specific skills, ultimately achieving significantly stronger generalization than either pure SFT or standalone RL.
                 </div>
             </div>
-            <p class="forget-desc">Comparison of SFT, RL, and DPPO on the 7B model in terms of performance gain on the VSI-Bench and forgetting on general benchmarks. (MMstar, RealWorldQA and ScienceQA)</p>
+            <p class="forget-desc">Comparison of SFT, RL, and DPPO on the 7B model in terms of performance gain on the VSI-Bench and forgetting on general benchmarks (MMstar, RealWorldQA and ScienceQA).</p>
             <!-- 图片容器：确保居中 + 控制与方框的间距 -->
             <div style="text-align: center; margin-bottom: 40px;">
                 <img src="forget.jpg" alt="SFT, RL, DPPO Comparison" class="forget-image">
