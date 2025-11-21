@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200, initial-scale=0.3, minimum-scale=0.3, maximum-scale=5.0, user-scalable=yes">
+    <title>Dppo</title>
+    <style>
+        /* 主标题样式 */
+        .title-main {
+            font-size: 2.2rem;
+            font-weight: 800;
+            line-height: 1.3;
+            margin: 1.5rem 0;
+            text-align: center;
+            letter-spacing: -0.02em;
+            color: #2d2d2d;
+        }
+
+        /* 全局样式 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased; /* iOS 文字抗锯齿，更清晰 */
+        }
+
+        /* Abstract 部分样式 */
+        .abstract-section {
+            margin-top: 4rem;
+            text-align: justify;
+        }
+        .abstract-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .abstract-section p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        /* 新增：Method 部分样式 */
+        .method-section {
+            margin: 4rem 0;
+        }
+        .method-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .method-desc {
+            text-align: justify;
+            margin: 0 2rem 2rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .method-image {
+            width: auto;
+            max-width: 1000px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: block; /* 修复 iOS 图片底部空白 */
+            margin: 0 auto; /* 确保居中 */
+        }
+
+        /* 实验部分（核心样式） */
+        .radar-chart-section {
+            margin-top: 4rem;
+        }
+        .radar-chart-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* 关键修改：所有h3标题统一居中对齐、调整上下间距 */
+        h3 {
+            text-align: center !important;
+            margin-left: 0 !important;
+            margin-top: 4rem !important;
+            margin-bottom: 1.5rem !important;
+        }
+
+        /* 性能演化轨迹 样式（保证图片完整显示） */
+        .evolution-subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4a4a4a;
+        }
+        .evolution-desc {
+            text-align: justify;
+            margin: 0 2rem 1.5rem;
+            margin-top: -1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .evolution-image-container {
+            margin: 1rem 0 0;
+        }
+        .evolution-image-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            /* iOS flex gap 兼容：用 padding 替代 gap，避免旧版本异常 */
+        }
+        .evolution-image-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 0.75rem; /* 替代 gap: 1.5rem，左右各0.75rem，总间距1.5rem */
+        }
+        .evolution-image-item:first-child {
+            padding-left: 0; /* 第一个元素取消左内边距 */
+        }
+        .evolution-image-item:last-child {
+            padding-right: 0; /* 最后一个元素取消右内边距 */
+        }
+        .evolution-image-item img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-height: 300px;
+            display: block; /* 修复 iOS 图片底部空白 */
+        }
+
+        /* 4张分布偏移图片样式 */
+        .shift-desc {
+            text-align: justify;
+            margin: 0 2rem 1.5rem;
+            margin-top:-1.5rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .shift-image-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0 1rem;
+        }
+        .shift-image-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 0.6rem; /* 替代 gap: 1.2rem，左右各0.6rem，总间距1.2rem */
+        }
+        .shift-image-item:first-child {
+            padding-left: 0;
+        }
+        .shift-image-item:last-child {
+            padding-right: 0;
+        }
+        .shift-image-item img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-height: 250px;
+            display: block; /* 修复 iOS 图片底部空白 */
+        }
+
+        /* forget.jpg 图片样式（居中显示） */
+        .forget-section {
+            margin: 0 0 3rem;
+            overflow: visible;
+        }
+        .forget-desc {
+            text-align: justify;
+            margin: 0 2rem 1.5rem;
+            margin-top:-1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .forget-image {
+            width: 80%;
+            max-width: 700px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: block; /* 修复 iOS 图片底部空白 */
+            margin: 0 auto;
+        }
+
+        /* 新增：20251120-134248.jpg 图片样式 */
+        .sft-rl-compare-section {
+            margin: 0 0 3rem;
+        }
+        .sft-rl-compare-desc {
+            text-align: justify;
+            margin: 0 2rem 1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .sft-rl-compare-image {
+            width: 80%;
+            max-width: 500px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 0;
+            display: block; /* 修复 iOS 图片底部空白 */
+            margin: 0 auto;
+        }
+
+        /* 新增：Final Result 模块样式 */
+        .final-result-subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4a4a4a;
+        }
+        .final-result-desc {
+            text-align: justify;
+            margin: 0 2rem 1.5rem;
+            margin-top:-1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .final-result-image {
+            width: auto;
+            max-width: 900px;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 0 auto 0;
+            display: block;
+        }
+
+        /* 新增：基准测试整体性能对比（两张图片）样式 */
+        .overall-benchmark-section {
+            margin: 0 0 3rem;
+        }
+        .overall-benchmark-desc {
+            text-align: justify;
+            margin: 0 2rem 2rem;
+            margin-top: -1.5rem;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .overall-benchmark-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .overall-benchmark-item {
+            width: 90%;
+            max-width: 900px;
+        }
+        .overall-benchmark-item img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: block; /* 修复 iOS 图片底部空白 */
+        }
+        /* 关键修改：移除图片与方框之间的额外间距 */
+        .overall-benchmark-section > div:nth-child(4) {
+            margin-bottom: 0 !important;
+        }
+
+        /* 性能对比 样式 */
+        .performance-subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #4a4a4a;
+        }
+        .chart-row {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .chart-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 45%;
+            padding: 0 1rem; /* 替代 gap: 2rem */
+        }
+        .chart-item:first-child {
+            padding-left: 0;
+        }
+        .chart-item:last-child {
+            padding-right: 0;
+        }
+        .chart-item img {
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 0.8rem;
+            display: block; /* 修复 iOS 图片底部空白 */
+        }
+        .chart-item p {
+            line-height: 1.5;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        /* 性能演化轨迹（单图）样式 */
+        .experimental-setup-section {
+            margin-top: 4rem;
+        }
+        .experimental-setup-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .experimental-setup-section img {
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* 新增：固定文字展示框样式（关键修改） */
+        .fixed-text-box {
+            width: 95%;
+            max-width: 900px;
+            margin: 0 auto 1.5rem;
+            padding: 0.2rem 1rem;
+            border: 2px solid #2e7d32;
+            border-radius: 8px;
+            background: #f5f5f5;
+            text-align: left;
+            box-sizing: border-box;
+            min-height: auto;
+            -webkit-border-radius: 8px; /* iOS 圆角兼容（旧版本） */
+        }
+        .box-label {
+            display: block;
+            text-align: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.9rem;
+            color: #2d2d2d;
+            font-weight: 600;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        /* 文字样式：保留原有加粗，新增Finding专属加粗样式 */
+        .fixed-text-content {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #333;
+            font-weight: 600;
+            margin: 1rem;
+            -webkit-font-smoothing: antialiased; /* iOS 文字更清晰 */
+        }
+        /* 关键新增：Finding X: 单独加粗（比正文更粗） */
+        .finding-tag {
+            font-weight: 800 !important;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 主标题 -->
+    <div class="hover-trigger-area">
+        <div class="affiliation">
+            <a class="title-main">Bridging VLMs and Embodied Intelligence with
+Deliberate Practice Policy Optimization</a>
+        </div>
+    </div>
+
+    <!-- Abstract 部分 -->
+    <div class="abstract-section">
+        <h2>Abstract</h2>
+        <p>Developing a universal and versatile embodied intelligence system presents two primary challenges: the critical embodied data bottleneck, where real-world data is scarce and expensive, and the algorithmic inefficiency of existing methods, which are resource-prohibitive. To address these limitations, we introduce Deliberate Practice Policy Optimization (DPPO), a metacognitive “Metaloop” training framework that dynamically alternates between supervised fine-tuning (competence expansion) and reinforcement learning (skill refinement). This enables automatic weakness identification and targeted resource allocation, specifically designed to maximize learning efficiency from sparse, finite data. Theoretically, DPPO can be formalised as a unified preference-learning framework. Empirically, training a vision-language embodied model with DPPO, referred to as Pelican-VL 1.0, yields a 20.3% performance improvement over the base model and surpasses opensource models at the 100B-parameter scale by 10.6%. We are open-sourcing both the models and code, providing the first systematic framework that alleviates the data and resource bottleneck and enables the community to build versatile embodied agents efficiently</p>
+    </div>
+
+    <!-- 新增：Method 部分 -->
+    <div class="method-section">
+        <h2>Method</h2>
+        <p class="method-desc">The DPPO framework implements an iterative RL–SFT metaloop that leverages rollout logging and difficulty-aware sampling for dynamic data curation. This adaptive process alternates between revealing weaknesses in the RL phase and refining them in the SFT phase, forming a continual self-diagnosis and self-refinement cycle.</p>
+        <img src="2.png" alt="DPPO Framework Overview" class="method-image">
+    </div>
+
+    <!-- 实验部分（核心内容） -->
+    <div class="radar-chart-section">
+        <h2>Experiments</h2>
+
+        <!-- 性能演化轨迹模块（6张图：完整显示，无文字） -->
+        <h3 class="evolution-subtitle">Performance Evolution Trajectory Across Metaloop Training</h3>
+        <div class="fixed-text-box">
+            <div class="fixed-text-content">
+                <span class="finding-tag">Finding 1:</span> Pelican-VL 72B exhibits continuous improvements on embodied benchmarks while maintaining stable results on general datasets, as demonstrated by its consistent performance on MVBench, a general-domain benchmark.
+            </div>
+        </div>
+        <p class="evolution-desc">The performance curves of Pelican-VL 72B during the Metaloop process on the general benchmark (MVBench) and five embodied benchmarks (EgoSchema, RefSpatialBench, VSI-Bench, Where2Place and COSMOS).</p>
+        
+        <div class="evolution-image-container">
+            <!-- 第一行3张图 -->
+            <div class="evolution-image-row">
+                <div class="evolution-image-item">
+                    <img src="a_MVBench.png" alt="MVBench">
+                </div>
+                <div class="evolution-image-item">
+                    <img src="b_RefSpatial-Bench.png" alt="RefSpatial-Bench">
+                </div>
+                <div class="evolution-image-item">
+                    <img src="c_VSI-Bench.png" alt="VSI-Bench">
+                </div>
+            </div>
+            <!-- 第二行3张图 -->
+            <div class="evolution-image-row">
+                <div class="evolution-image-item">
+                    <img src="d_EgoSchema.png" alt="EgoSchema">
+                </div>
+                <div class="evolution-image-item">
+                    <img src="e_Where2Place.png" alt="Where2Place">
+                </div>
+                <div class="evolution-image-item">
+                    <img src="f_COSMOS.png" alt="COSMOS">
+                </div>
+            </div>
+        </div>
+        
+
+
+        <!-- 4张分布偏移图片及说明文字 -->
+        <h3 class="evolution-subtitle">Distributional shift of training data</h3>
+        <div class="fixed-text-box">
+            <div class="fixed-text-content">
+                <span class="finding-tag">Finding 2:</span> As model training progresses, the number of questions the policy model is unable to answer gradually decreases, while the number it can answer steadily increases.
+            </div>
+        </div>
+        <p class="shift-desc">Distributional shift of training data relative to distinct benchmarks in (1-1) RL training on the Pelican-VL 7B model. For Where2Place, the rewards are numerical and model performance is measured by the average score per rollout. For the other datasets, the rewards are binary, and performance is measured by the number of correct answers. The progressively darker line colors indicate the progression of RL training.</p>
+        
+        <div class="shift-image-row">
+            <div class="shift-image-item">
+                <img src="vsibench_qa_multi_epoch_by_range.png" alt="VSIBench QA">
+            </div>
+            <div class="shift-image-item">
+                <img src="vsibench_mcq_multi_epoch_by_range.png" alt="VSIBench MCQ">
+            </div>
+            <div class="shift-image-item">
+                <img src="egolife_multi_epoch_by_range.png" alt="EgoLife">
+            </div>
+            <div class="shift-image-item">
+                <img src="cosmos_multi_epoch_by_range.png" alt="COSMOS">
+            </div>
+        </div>
+
+
+
+        <!-- forget.jpg 图片及说明文字（居中显示 + 间距控制） -->
+        <div class="forget-section">
+            <h3 class="evolution-subtitle">Advantages of DPPO compared with SFT and RL</h3>
+            <div class="fixed-text-box">
+                <div class="fixed-text-content">
+                    <span class="finding-tag">Finding 3:</span> DPPO preserves capability balance, mitigates catastrophic forgetting, and consistently elevates task-specific skills, ultimately achieving significantly stronger generalization than either pure SFT or standalone RL.
+                </div>
+            </div>
+            <p class="forget-desc">Comparison of SFT, RL, and DPPO on the 7B model in terms of performance gain on the VSI-Bench and forgetting on general benchmarks. (MMstar, RealWorldQA and ScienceQA)</p>
+            <!-- 图片容器：确保居中 + 控制与方框的间距 -->
+            <div style="text-align: center; margin-bottom: 40px;">
+                <img src="forget.jpg" alt="SFT, RL, DPPO Comparison" class="forget-image">
+            </div>
+        </div>
+
+        <!-- 新增：20251120-134248.jpg 图片及说明文字（添加简洁英文标题） -->
+        <div class="sft-rl-compare-section">
+            <p class="sft-rl-compare-desc">Performance comparison with adopting only SFT and RL methods under the same data budget for Pelican-VL 7B. DPPO consistently delivers stronger overall performance and markedly better generalization on diverse benchmarks.</p>
+            <img src="20251120-134248.jpg" alt="SFT & RL Performance Comparison" class="sft-rl-compare-image">
+            <!-- 固定文字展示框 -->
+        </div>
+
+        <!-- 新增：Final Result 模块 -->
+        <h3 class="final-result-subtitle">Cycle distribution shift</h3>
+        <!-- 固定文字展示框 -->
+        <div class="fixed-text-box">
+            <div class="fixed-text-content">
+                <span class="finding-tag">Finding 4:</span> Different tasks push the model in distinct representational directions, making a single training stage inadequate. DPPO adapts to these diverse task demands, offering enhanced flexibility and improved performance.            
+            </div>
+        </div>
+        <p class="final-result-desc">Distributional shift of the Pelican-VL 7B model’s trajectory embedding centroids across DPPO metaloop cycles, visualized via t-SNE on five benchmarks. The figure tracks how the model’s representations evolve over alternating training steps, producing distinct trajectories for each benchmark.</p>
+        <!-- 图片：确保居中 + 控制与方框的间距 -->
+        <img src="combined_stage_cluster_7b_dppo.png" alt="DPPO Metaloop Trajectory Embedding Centroids" class="final-result-image" style="margin-bottom: 10px">
+        <br>
+
+        <!-- 新增：基准测试整体性能对比（两张图片，两排单张） -->
+        <div class="overall-benchmark-section">
+            <h3 class="final-result-subtitle">Overall performance comparison on benchmarks</h3>
+            <!-- 固定文字展示框 -->
+            <div class="fixed-text-box">
+                <div class="fixed-text-content">
+                    <span class="finding-tag">Finding 5:</span> Pelican-VL 1.0 achieves superior performance at the 100B-level. Compared with the Qwen2.5-VL 72B-Instruct, Pelican-VL 1.0 achieves significant improvements on benchmarks in the embodied domain.
+                </div>
+            </div>
+            <p class="overall-benchmark-desc">Bold and underlined numbers indicate the best and second-best results, respectively. A dagger (†) marks results differing from official reports, possibly as official evaluations used model-specific prompts and the models are prompt-sensitive, while our results are obtained under a unified protocol for fair comparison. An asterisk (*) denotes results reported from official sources.</p>
+            
+            <!-- 第一排：20251106-160357.jpg -->
+            <div class="overall-benchmark-row">
+                <div class="overall-benchmark-item">
+                    <img src="20251106-160357.jpg" alt="Overall Benchmark Comparison 1">
+                </div>
+            </div>
+            
+            <!-- 第二排：20251106-160348.jpg -->
+            <div class="overall-benchmark-row">
+                <div class="overall-benchmark-item">
+                    <img src="20251106-160348.jpg" alt="Overall Benchmark Comparison 2">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
